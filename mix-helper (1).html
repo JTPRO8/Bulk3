@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>제조 투입 도우미</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#f6f7f9;--card:#fff;--tx:#1d2330;--mut:#667085;--bd:#dde1e8;--pri:#2563eb;--ok:#16794a;--bad:#b42318}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#12151b;--card:#1b2029;--tx:#e8ebf1;--mut:#9aa4b5;--bd:#2d3441;--pri:#6b9bff;--ok:#6fdba4;--bad:#ff8f84}}
+html,body{height:100%;margin:0}*{box-sizing:border-box}
+body{background:var(--bg);color:var(--tx);font:16px/1.4 -apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif}
+#app{height:100%}.pg{max-width:760px;margin:0 auto;padding:14px}h1{font-size:20px;margin:6px 0 12px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:12px;margin-bottom:10px}
+.pr{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.pr .t{flex:1;cursor:pointer;min-width:160px}.pr b{font-size:18px}
+.sub{font-size:13px;color:var(--mut)}.ok{color:var(--ok)}.bad{color:var(--bad)}
+.btn{padding:12px 16px;border:0;border-radius:10px;background:var(--pri);color:#fff;font-size:16px}
+.btn.g{background:var(--card);color:var(--tx);border:1px solid var(--bd)}
+.f{width:100%;padding:10px;border:1px solid var(--bd);border-radius:8px;background:var(--bg);color:var(--tx);font:inherit;margin:4px 0 10px}
+textarea.f{min-height:150px;font:13px ui-monospace,monospace;white-space:pre}
+.t{width:100%;border-collapse:collapse;font-size:14px}.t th{position:sticky;top:0;background:var(--card);border-bottom:2px solid var(--bd);padding:5px 4px;text-align:left;z-index:1}
+.t td{border-bottom:1px solid var(--bd);padding:5px 4px}.t th:first-child,.t td:first-child{padding-left:28px}.t th:last-child,.t td:last-child{padding-right:28px}.t tr.ps td{border-top:3px solid var(--bd)}
+.t tr.pA td{background:rgba(245,158,11,.14)}.t tr.pB td{background:rgba(236,72,153,.12)}.t tr.pC td{background:rgba(139,92,246,.13)}.t tr.pD td{background:rgba(6,182,212,.13)}.t tr.pE td{background:rgba(249,115,22,.14)}.t tr.pF td{background:rgba(100,116,139,.15)}.t tr.pG td{background:rgba(20,184,166,.13)}.t tr.pH td{background:rgba(234,179,8,.15)}.t tr.pI td{background:rgba(244,63,94,.10)}
+.t tr.d td{background:rgba(110,150,125,.30);color:var(--mut)}.t tr.d td:nth-child(4)::before{content:"✔ ";color:var(--ok)}.t tr.c td{background:rgba(37,99,235,.3);font-weight:700}
+.t .n{text-align:right;font-variant-numeric:tabular-nums}
+#w{height:100%;display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,38fr) minmax(0,62fr);gap:10px;padding:10px}
+#L{overflow:auto;background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:0 6px 6px}
+#R{display:flex;flex-direction:column;min-height:0}
+.top{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.top button,.top input{padding:8px 10px;border:1px solid var(--bd);background:var(--card);color:var(--tx);border-radius:10px;font-size:14px}.top input{width:80px}.top #bn{width:90px}.top input[type=date]{width:150px}
+.bar{height:8px;background:var(--bd);border-radius:6px;overflow:hidden;margin:8px 0}.bar i{display:block;height:100%;background:var(--ok);width:0}
+#main{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:6px;cursor:pointer;user-select:none;min-height:0}
+#ph{display:inline-block;background:var(--pri);color:#fff;border-radius:10px;padding:2px 16px;font-size:clamp(22px,3.5vw,44px);font-weight:800}
+#cnt{color:var(--mut);font-size:clamp(14px,2vw,22px);margin:4px 0}
+#nm{font-size:clamp(26px,min(5.5vw,7vh),76px);font-weight:800;line-height:1.15;word-break:keep-all;margin:.2em 0}
+#am{font-size:clamp(36px,min(8vw,11vh),120px);font-weight:800;color:var(--pri);line-height:1.1;font-variant-numeric:tabular-nums}
+#am small{font-size:.42em;color:var(--mut);font-weight:700;margin-left:.4em;white-space:nowrap}
+#gm{font-size:clamp(18px,3vw,40px);color:var(--mut)}#cd{font-size:clamp(14px,2vw,22px);color:var(--mut);margin-top:6px}
+#nx{font-size:clamp(14px,2vw,20px);color:var(--mut);border-top:1px solid var(--bd);padding-top:6px;text-align:center;min-height:34px}
+.bt{display:flex;gap:8px;margin-top:6px}.bt button{border:0;border-radius:14px;font-size:clamp(20px,3vw,32px);font-weight:700;height:clamp(64px,12vh,110px)}
+#pvb{flex:1;background:var(--card);color:var(--tx);border:1px solid var(--bd)}#spb{flex:5;background:var(--pri);color:#fff}
+.yl{background:#fff3a0!important;color:#1d2330!important;font-weight:700}.t .f{margin:0;min-width:84px;padding:8px}
+.bg{font-size:clamp(22px,4vw,32px)!important;font-weight:800;color:var(--pri);background:rgba(37,99,235,.14)}.tw{color:var(--pri)!important;font-size:15px}
+.bigm{font-size:clamp(26px,5vw,44px);font-weight:800;color:var(--pri);padding:4px 0}.bigm b{font-size:1.2em}
+.t tr.pc th{border-bottom:0;color:var(--mut);font-size:13px;position:static;padding:2px 4px}
+.xl{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:12px;margin-bottom:10px}.xh{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:8px}
+.xt{border-collapse:collapse;font-size:15px;margin-top:10px}.xt td{border:1px solid var(--tx);padding:6px 10px;text-align:center;white-space:nowrap}
+.xt tr.pc td{border:0;color:var(--mut);font-size:13px;padding:2px 10px}.xt tr.hd td{background:rgba(100,116,139,.15);font-weight:700}
+.xt td.gp{border:0;width:14px;padding:0}.xt input.f{width:110px;margin:0;text-align:center;font-weight:700;padding:8px}
+.xt .rd{color:#d92d20;font-weight:800;font-size:20px}.xt .bl{color:var(--pri)}.xt .yl2,.yl2{background:#fff3a0;color:#1d2330}
+.xt .tot{background:rgba(37,99,235,.18);font-size:24px;font-weight:800;border:3px solid var(--pri);color:var(--tx)}.xt .tot small{font-size:13px;font-weight:700}
+.em{border:3px solid var(--pri)!important;font-size:18px!important;font-weight:800}
+.hint{font-size:12px;color:var(--mut);text-align:center;margin-top:4px}
+</style></head><body><div id="app"></div>
+<script>
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const SEED=[["A",1,"L-S00582","Carfil 1,3BG (1,3-BG, 부틸렌글라이콜)",3],["A",2,"L-S00041","CLEAR DIOL 3000 (Hexandiol, 헥산디올)",0.5],["A",3,"P-S00866","4′-Hydroxyacetophenone (HAP, 하이드록시아세토페논)",0.5],["B",1,"L-S00141","RHEODOL TW-O120V (Tween 80, 트윈80, TW80)",2],["B",2,"P-S00878","L-Menthol (사급원료, 멘톨)",0.2],["C",1,"P-S00826","Sodium Hyaluronate (200kDa, HA-TLM20-40, 저분자, 점증)",0.001],["C",2,"L-S00600","Glycerin (글리세린, PALMERA G995U)",5],["D",1,"L-S00010","정제수",71.217],["E",1,"P-S00823","Miami LS-190 (SLG, 소듐라우로일글루타메이트)",2],["E",2,"L-C01201","Mitaine CA (코카미도프로필베타인)",15],["F",1,"L-S00010","정제수",0.5],["F",2,"L-S00606","D-Panthenol (덱스판테놀, 비타민B5, VitaminB5)",0.01],["F",3,"L-C01216","Lacco",0.01],["F",4,"L-C01215","Bifisol2 (비피다놀2)",0.01],["F",5,"L-C00240","BSASM™ (N)",0.01],["F",6,"L-S00060","편백수",0.01],["F",7,"L-C00311","알로에베라잎수",0.01],["F",8,"L-C01225","CleanY",0.01],["F",9,"L-C01233","DeoFlo (사급원료, 배롱나무꽃추출물)",0.01],["F",10,"P-S00844","SpecKare™ GSH (Glutathione, 글루타치온)",0.001],["F",11,"P-S00081","Niacinamide (나이아신아마이드, 비타민B3)",0.001]];
+let DB=(()=>{try{return JSON.parse(localStorage.getItem('pv2'))}catch(e){return null}})()||{p:[{id:"s1",name:"락토클린징폼01",text:SEED.map(r=>r.join("\t")).join("\n"),sz:0,d:"2026-11-24"}],run:null};
+function save(){DB.p.forEach(p=>{if(p.kind)hs(p)});try{localStorage.setItem('pv2',JSON.stringify(DB))}catch(e){}}
+const SEEDP=[["k1","락토메디겔S 02 (100kg*2batch)",`A|1|L-S00010|정제수|88.0735
+B|1|P-S00856|Hecellose H100KPC (하이드록시에틸셀룰로오스,점증)|1.45
+B|2|P-S00826|Sodium Hyaluronate(200kDa,HA-TLM20-40,저분자,점증)|0.1
+B|3|L-S00622|Zemea Select Propanediol (프로판다이올)|4
+B|2|P-S00855|ZigaMoist PM-II|0.06
+C|1|L-C01202|LactoPoL DX193 (W) (락토바실러스발효물)_20kg|3.2
+D|3|P-S00866|4′-Hydroxyacetophenone (HAP, 하이드록시아세토페논)|0.5
+D|1|L-S00582|Carfil 1,3BG (1,3-BG, 부틸렌글라이콜)|1
+D|1|L-S00041|CLEAR DIOL 3000 (Hexandiol,헥산디올)|0.5
+E|1|L-S00010|정제수|0.1
+E|2|L-C01199|Galacid Cosmetic 90 (락틱애씨드)|0.0035
+G|1|L-S00010|정제수|1
+G|2|L-C00311|알로에베라잎수|0.001
+G|3|L-C01203|Galactomyces Forte (갈락토미세스발효여과물)|0.001
+G|4|L-C00240|BSASM™ (N)|0.01
+G|5|P-S00867|L-Arginine (알지닌)|0.001`],["k2","락토메디겔S 02-HK01 (70kg*2batch)",`A|1|L-S00010|정제수|88.0725
+B|1|P-S00856|Hecellose H100KPC (하이드록시에틸셀룰로오스,점증)|1.45
+B|2|P-S00826|Sodium Hyaluronate(200kDa,HA-TLM20-40,저분자,점증)|0.1
+B|3|L-S00622|Zemea Select Propanediol (프로판다이올)|4
+B|2|P-S00855|ZigaMoist PM-II|0.06
+C|2|L-C01202|LactoPoL DX193 (W) (락토바실러스발효물)_20kg|3.2
+D|3|P-S00866|4′-Hydroxyacetophenone (HAP, 하이드록시아세토페논)|0.5
+D|1|L-S00582|Carfil 1,3BG (1,3-BG, 부틸렌글라이콜)|1
+D|1|L-S00041|CLEAR DIOL 3000 (Hexandiol,헥산디올)|0.5
+E|1|L-S00010|정제수|0.1
+E|2|L-C01199|Galacid Cosmetic 90 (락틱애씨드)|0.0035
+G|1|L-S00010|정제수|1
+G|2|L-C00311|알로에베라잎수|0.001
+G|3|L-C01203|Galactomyces Forte (갈락토미세스발효여과물)|0.001
+G|4|L-C00240|BSASM™ (N)|0.01
+G|5|L-C01217|SoyStem|0.001
+G|6|P-S00867|L-Arginine (알지닌)|0.001`],["k3","락토청결제 01 (60kg*1batch)",`A|1|L-S00010|정제수|86.787
+B|1|P-S00866|4′-Hydroxyacetophenone (HAP, 하이드록시아세토페논)|0.5
+B|2|P-S00826|Sodium Hyaluronate(200kDa,HA-TLM20-40,저분자,점증)|0.1
+B|3|P-S00855|ZigaMoist PM-II|0.06
+A|2|L-C00311|알로에베라잎수|3.5
+A|3|L-C01202|LactoPoL DX193 (W) (락토바실러스발효물)_20kg|3.2
+B|1|P-S00856|Hecellose H100KPC (하이드록시에틸셀룰로오스,점증)|1.6
+E|1|L-S00010|정제수|0.5
+E|2|L-C01199|Galacid Cosmetic 90 (락틱애씨드)|0.013
+A|3|L-S00606|D-Panthenol(덱스판테놀,비타민B5,VitaminB5)|0.01
+G|1|L-C01196|Lacticaseibacillus rhamnosus HD (락토바실러스발효물)|3.2
+D|1|L-S00041|CLEAR DIOL 3000 (Hexandiol,헥산디올)|0.5
+G|3|L-C00240|BSASM™ (N)|0.01
+G|4|L-C01216|Lacco|0.01
+G|5|L-C01215|Bifisol2 (비피다놀2)|0.01`],["k4","락토펩타이드젤 02 (80kg*2batch)",`A|1|L-S00010|정제수|85.6625
+B|1|P-S00856|Hecellose H100KPC (하이드록시에틸셀룰로오스,점증)|1.65
+B|2|P-S00826|Sodium Hyaluronate(200kDa,HA-TLM20-40,저분자,점증)|0.1
+B|3|L-S00622|Zemea Select Propanediol (프로판다이올)|4
+B|2|P-S00855|ZigaMoist PM-II|0.06
+C|2|L-C01202|LactoPoL DX193 (W) (락토바실러스발효물)_20kg|3.2
+D|3|P-S00866|4′-Hydroxyacetophenone (HAP, 하이드록시아세토페논)|0.5
+D|1|L-S00582|Carfil 1,3BG (1,3-BG, 부틸렌글라이콜)|1
+D|1|L-S00041|CLEAR DIOL 3000 (Hexandiol,헥산디올)|0.5
+E|1|L-S00010|정제수|0.1
+E|2|L-C01199|Galacid Cosmetic 90 (락틱애씨드)|0.0035
+F|1|L-C01196|Lacticaseibacillus rhamnosus HD (락토바실러스발효물)|3.2
+F|2|L-C00311|알로에베라잎수|0.001
+F|3|L-C01218|Spina PDRN|0.001
+F|4|L-C01217|[샘플]SoyStem|0.001
+F|6|L-C00240|BSASM™ (N)|0.01
+F|1|P-S00081|Niacinamide(나이아신아마이드,비타민B3)|0.01
+F|5|P-S00671|SpecPed AH8P (AHP-8, Acetyl Hexapeptide-8)|0.001`],["k5","앰플런스 앰플",`A|1|L-S00010|정제수|51.488
+A|2|L-S00060|편백수|0.5
+A|2|L-S00600|Glycerin(글리세린, PALMERA G995U)|1.7
+A|3|L-C00660|Hyacross TL-100(고분자,액체타입,점증)|0.05
+B|1|L-S00582|Carfil 1,3BG (1,3-BG, 부틸렌글라이콜)|20
+B|1|P-S00826|Sodium Hyaluronate(200kDa,HA-TLM20-40,저분자,점증)|1
+B|5|P-S00400|Mini HA(저분자,유기농)|0.001
+C|1|P-S00351|SpecWhite® VCE(EAE,에칠아스코빌에텔)|4
+C|2|P-S00680|Sino white TXA(트라넥사믹산)|0.5
+C|3|P-S00843|Adenosine(아데노신)|0.1
+C|4|P-S00600|Citric Acid anhydrous (구연산) [Cat.2561-4405]|0.08
+C|6|P-S00671|SpecPed AH8P (AHP-8, Acetyl Hexapeptide-8)|0.0005
+D|1|L-C01169|TREE MIX 110 NAT|0.08
+D|2|L-S00141|RHEODOL TW-O120V (Tween 80, 트윈80, TW80)|0.4
+E|1|L-S00220|Hydrolite-5 green (Pentylene Glycol,펜틸렌글라이콜,방부)|0.0005
+E|3|L-C00240|BSASM™ (N)|0.1
+E|1|L-C00020|바이오펩톤세라마이드리포좀|20`],["k6","HR 펩타이드_퍼스트",`A|1|L-S00010|정제수|83.33
+B|1|P-S00260|MSM(식물성유황)|1
+B|2|P-C00040|Gen90 Nano(수등성제니스테인5%, Genistein)|0.5
+B|3|P-S00835|피쉬콜라겐(1000Da)|0.1
+B|4|P-S00690|Sodium Hyaluronate(1,000kDa, HA-T,중분자,점증)|0.1
+C|1|L-C01198|Crosalic-20(살리실산, Salicylic Acid)|2.5
+D|1|L-C01221|JanyTree 5GF Complex No.1|1
+D|2|L-C00330|sh-EGF(100ppm)_올리고펩타이드-1|0.1
+D|3|L-C00340|Phyto-NEP(1,000ppm)_카메오일데카펩타이드-9|0.1
+D|4|L-S00606|D-Panthenol(덱스판테놀,비타민B5,VitaminB5)|0.5
+D|5|L-C00210|Calmiskin GR(칼미스킨,페퍼민트)|0.2
+D|6|L-C01197|바이오펩톤 (**제균필터 후 사용**)|7
+E|1|P-S00081|Niacinamide(나이아신아마이드,비타민B3)|0.5
+E|2|P-S00661|SpecPed GCu11P (CTP Powder)|0.05
+E|3|P-S00320|Pyridoxine hydrochloride(비타민B6,피리독신) [Cat.6632-4125]|0.01
+E|4|P-S00200|바이오틴(비타민 B7, Vitamine H)|0.01
+F|1|L-S00220|Hydrolite-5 green (Pentylene Glycol,펜틸렌글라이콜,방부)|3`],["k7","앰플런스 버블폼",`A|1|P-S00823|Sodium Lauroyl-Glutamate (SLG)|7
+A|2|P-S00690|Sodium Hyaluronate(1,000kDa, HA-T,중분자,점증)|0.001
+A|3|P-S00400|Mini HA(저분자,유기농)|0.001
+B|1|L-S00600|Glycerin(글리세린, PALMERA G995U)|7
+B|2|L-C00660|Hyacross TL-100(고분자,액체타입,점증)|0.001
+C|1|L-S00060|편백수|0.1
+C|2|L-S00010|정제수|58.386
+D|1|L-C01201|MITAINE CA|13
+D|2|L-C01159|Proteol APL EF (애플아미노산)|13
+E|1|L-S00141|RHEODOL TW-O120V (Tween 80, 트윈80, TW80)|1
+E|2|L-C01169|TREE MIX 110 NAT|0.4
+F|3|L-C00240|MultiEx BSASM PLUS|0.1
+F|4|L-C00020|바이오펩톤세라마이드리포좀|0.01
+F|1|L-S00041|CLEAR DIOL 3000 (Hexandiol,헥산디올)|0.001`],["k8","라뉴필_앰플부스터",`A|1|정제수|53.394
+B|1|Carfil 1,3BG (1,3-BG, 부틸렌글라이콜)|4
+B|2|Zemea Select Propanediol (프로판다이올)|3
+D|1|Hecellose H100KPC (하이드록시에틸셀룰로오스,점증)|0.5
+C|1|Gotu Kola P.E(Centella Asiatica, 아시아티코사이드)|0.1
+C|2|Allantoin(알란토인)|0.1
+C|3|Papain [Cat. 164-00172]|0.001
+C|4|MSM(식물성유황)|5
+E|1|정제수|5
+E|2|Potassium hydroxide, pellet [Cat. 6584-4400] (KOH 85%)|0.5
+F|1|정제수|14.95
+F|2|DL-Malic acid [Cat.5521-4405]|0.01
+F|3|Succinic acid (호박산) [Cat.7672-4405]|0.01
+F|4|Galacid Cosmetic 90 (락틱애씨드)|0.03
+F|5|Lactobionic Acid (락토바이오닉 애씨드)|5
+G|1|Crosalic-20(살리실산, Salicylic Acid)|2.5
+H|1|Hydrolite-5 green (Pentylene Glycol,펜틸렌글라이콜,방부)|3
+I|1|BSASM™ (N)|2
+I|2|JanyTree 5GF Complex No.1|0.5
+I|3|알로에베라잎수|0.1
+I|4|sh-EGF(100ppm)_올리고펩타이드-1|0.1
+I|5|바이오펩톤|0.005
+I|6|IP-Glucan(베타글루칸)|0.1
+I|7|LactoPoL DX193 (W) (락토바실러스발효물)_20kg|0.1`],["k9","라뉴필_필링워시",`A|1|정제수|72.195
+B|1|Carfil 1,3BG (1,3-BG, 부틸렌글라이콜)|10
+D|1|Hecellose H100KPC (하이드록시에틸셀룰로오스,점증)|0.5
+C|1|MSM(식물성유황)|0.1
+C|2|Gotu Kola P.E(Centella Asiatica, 아시아티코사이드)|0.1
+C|3|Allantoin(알란토인)|0.1
+E|1|정제수|5.499
+E|2|Hydrolite-5 green (Pentylene Glycol,펜틸렌글라이콜,방부)|3
+E|3|RHEODOL TW-O120V (Tween 80, 트윈80, TW80)|2.5
+E|4|DS-Ceramide Y30(세라마이드)|0.001
+E|5|Brillian-CSA (카프릴로일살리실릭애씨드)|0.5
+E|6|Miami LS-190 (SLG, 소듐라우로일글루타메이트)|0.5
+F|1|정제수|2.75
+F|2|L-Arginine (알지닌)|0.25
+G|1|BSASM™ (N)|2
+G|2|바이오펩톤|0.005`],["k10","시스테인_퍼스트",`A|1|정제수|78.365
+B|1|Sino white TXA(트라넥사믹산)|3.5
+B|2|Niacinamide(나이아신아마이드,비타민B3)|2.1
+B|3|SpecWhite® ABT(Arbutin,알부틴)|2
+B|4|MSM(식물성유황)|1
+B|5|Allantoin(알란토인)|0.05
+B|6|Sodium Hyaluronate(HA-E-014,메디컬등급,점증)|0.05
+B|7|피쉬콜라겐(1000Da)|0.05
+C|1|Hyacross TL-100(고분자,액체타입,점증)|0.25
+C|2|D-Panthenol(덱스판테놀,비타민B5,VitaminB5)|0.5
+D|1|Hydrolite-5 green (Pentylene Glycol,펜틸렌글라이콜,방부)|3
+E|1|바이오펩톤|4
+E|2|MultiEx BSASM PLUS|2
+E|3|Calmiskin GR(칼미스킨,페퍼민트)|1
+E|4|SpecKare™ GSH (Glutathione, 글루타치온)|0.05
+E|5|N-Acetyl-L-Cysteine(NAC) [Cat.1137-4435]|0.005
+F|1|정제수|2
+F|2|L-Arginine (알지닌)|0.08`],["k11","플라센타_퍼스트",`A|1|정제수|66.655
+B|1|Sino white TXA(트라넥사믹산)|3
+B|2|MSM(식물성유황)|1
+B|3|Adenosine(아데노신)|0.1
+B|4|Allantoin(알란토인)|0.05
+B|5|Sodium Hyaluronate(HA-E-014,메디컬등급,점증)|0.05
+B|6|피쉬콜라겐(1000Da)|0.05
+C|1|말태반 가수분해 추출액|15.31
+C|2|Hyacross TL-100(고분자,액체타입,점증)|0.25
+C|3|D-Panthenol(덱스판테놀,비타민B5,VitaminB5)|0.5
+D|1|Hydrolite-5 green (Pentylene Glycol,펜틸렌글라이콜,방부)|3
+E|1|바이오펩톤|4
+E|2|MultiEx BSASM PLUS|2
+E|3|Calmiskin GR(칼미스킨,페퍼민트)|1
+E|4|HerbEx Portulaca Extract(마치현추출물)|1
+E|5|SpecPed GCu11P (CTP Powder)|0.005
+F|1|정제수|2
+F|2|L-Arginine (알지닌)|0.03`],["k12","로맨틱 여 향수",`B|1|L-S00603|변성알코올 95%_200L(160kg)|78.5
+A|1|L-S00010|정제수|3
+A|2|L-S00605|EMALEX HC-60|1
+A|3|L-S00582|1,3-BG(Butylene Glycol, 부틸렌글라이콜)|2
+C|1|L-S00603|변성알코올 95%_200L(160kg)|0.4999
+C|2|L-S00190|Vitamin E Acetate (토코페릴아세테이트)|0.0001
+D|1|L-S00440|로맨틱 여(시즌2) 향료 SP-52253(15%)|15`],["k13","핫스터프 남 향수",`B|1|L-S00603|변성알코올 95%_200L(160kg)|64.2
+A|1|L-S00010|정제수|13
+A|2|L-S00605|EMALEX HC-60|0.3
+A|3|L-S00582|1,3-BG(Butylene Glycol, 부틸렌글라이콜)|2
+C|1|L-S00603|변성알코올 95%_200L(160kg)|0.4999
+C|2|L-S00190|Vitamin E Acetate (토코페릴아세테이트)|0.0001
+D|1|L-S00450|핫스터프 남(시즌2) 향료 SP-76665(20%)|20`]];
+SEEDP.forEach(s=>{if(!DB.p.some(x=>x.id==s[0])&&!(DB.hid||[]).includes(s[0]))DB.p.push({id:s[0],name:s[1],text:s[2],sz:0,d:"2026-11-25"})});if(!DB.m1){DB.p.forEach(p=>{if(p.id=="k12"||p.id=="k13")p.sh=""});DB.m1=1}save();
+function parse(t){return t.split(/\r?\n/).map(l=>l.split(/\t|\|/).map(x=>x.trim())).filter(a=>a.length>=4&&/^[A-Za-z]$/.test(a[0])&&/^\d+$/.test(a[1])).map(a=>{const hc=a.length>=5&&/^[A-Za-z]-?[A-Za-z]?\d{3,}/.test(a[2]);return{ph:a[0].toUpperCase(),no:+a[1],code:hc?a[2]:"",name:hc?a[3]:a[2],pct:parseFloat((hc?a[4]:a[3]).replace(/,/g,""))}}).filter(x=>x.name&&!isNaN(x.pct))}
+const dn=s=>s;
+const pn=s=>s.replace(/\s*\([^()]*\)/g,"").trim();
+function tbl(a,sz,c){let h='<table class="t"><thead><tr><th>상</th><th>번</th><th>코드</th><th>원료명</th><th class="n">배합비%</th>'+(sz?'<th class="n">계측량(kg)</th>':'')+'</tr></thead><tbody>';
+ a.forEach((x,k)=>{const cl="p"+x.ph+" "+(k>0&&a[k-1].ph!=x.ph?"ps ":"")+(c==null?"":k<c?"d":k==c?"c":"");
+ h+=`<tr id="r${k}" class="${cl}"><td>${x.ph}</td><td>${x.no}</td><td>${esc(x.code)}</td><td>${esc(dn(x.name))}</td><td class="n">${x.pct==null?"-":x.pct}</td>${sz?`<td class="n">${fk(x,sz).toFixed(6)}</td>`:""}</tr>`});return h+"</tbody></table>"}
+let R=null,E=null;
+function hm(){R=null;document.onkeydown=null;let h='<div class="pg"><h1>🧴 제조 투입 도우미</h1>';
+ if(DB.run){const p=DB.p.find(x=>x.id==DB.run.pid);if(p&&DB.run.i>0)h+=`<div class="card"><b>진행 중: ${esc(pn(p.name))}</b> <span class="sub">(${DB.run.i}번째 원료까지 완료)</span><div class="pr" style="margin-top:8px"><button class="btn" onclick="op('${p.id}',${DB.run.i})">이어서 진행</button><button class="btn g" onclick="DB.run=null;save();hm()">무시</button></div></div>`}
+ h+='<button class="btn" onclick="ed()">＋ 새 제품 등록</button><p class="sub">생산할 제품을 선택하세요</p>';
+ DB.p.forEach(p=>{h+=`<div class="card pr"><div class="t" onclick="op('${p.id}')"><b>${esc(pn(p.name))}</b><div class="sub">${p.kind=="dil"?"원액 희석 · 총제조량 "+p.T+" kg":p.kind=="stock"?"원액 + 펜틸렌글라이콜 · 용기 "+p.rows.length+"개":"원료 "+parse(p.text).length+"종 · 최근 생산량 "+(p.sz||"-")+" kg"} · 저장 ${p.d}</div></div>${p.kind?"":`<button class="btn g" onclick="ed('${p.id}')">수정</button>`}<button class="btn g" onclick="del('${p.id}')">삭제</button></div>`});
+ h+=(DB.log&&DB.log.length?'<p class="sub">최근 생산 기록</p><div class="card">'+DB.log.slice(0,10).map(l=>`<div class="sub" style="padding:3px 0">${esc(l.d)} · <b>${esc(pn(l.n))}</b> · 차수 ${esc(l.b||"-")} · ${l.sz} kg</div>`).join("")+'</div>':"");
+ h+='<div class="pr"><button class="btn g" onclick="bk()">백업 복사</button><button class="btn g" onclick="rs()">백업 복원</button></div><p class="sub">저장한 배합은 이 기기·브라우저에만 보관됩니다. 브라우저 데이터를 지우면 사라지니 가끔 백업해 두세요. 배합이 개정되면 ERP와 대조해서 수정하세요.</p></div>';$("#app").innerHTML=h}
+function del(id){if(confirm("이 제품을 삭제할까요?")){DB.p=DB.p.filter(x=>x.id!=id);(DB.hid=DB.hid||[]).push(id);save();hm()}}
+function bk(){const t=JSON.stringify(DB.p);try{navigator.clipboard.writeText(t).then(()=>alert("복사했습니다. 메모장 등에 붙여넣어 보관하세요."),()=>prompt("아래 내용을 복사하세요",t))}catch(e){prompt("아래 내용을 복사하세요",t)}}
+function rs(){const t=prompt("백업 내용을 붙여넣으세요");if(!t)return;try{JSON.parse(t).forEach(p=>{if(p&&p.id&&p.name&&p.text){const i=DB.p.findIndex(x=>x.id==p.id);i<0?DB.p.push(p):DB.p[i]=p}});save();hm()}catch(e){alert("백업 내용이 올바르지 않습니다")}}
+function ed(id){const p=id?DB.p.find(x=>x.id==id):null;E={id,name:p?p.name:"",text:p?p.text:"",sh:p?p.sh||"":""};
+ $("#app").innerHTML=`<div class="pg"><h1>${p?"제품 수정":"새 제품 등록"}</h1><div class="card"><label class="sub">제품명</label><input class="f" value="${esc(E.name)}" oninput="E.name=this.value">
+ <label class="sub">ERP 배합표를 드래그해서 복사한 뒤 아래에 붙여넣으세요 (열 순서: 상구분, 번호, 원료코드, 원료명, 배합비% — 원료코드 열이 없어도 됩니다)</label><textarea class="f" oninput="E.text=this.value;pvw()">${esc(E.text)}</textarea><div id="ev"></div>
+ <div class="pr"><button class="btn" onclick="sd()">저장</button><button class="btn g" onclick="hm()">취소</button></div></div></div>`;pvw()}
+function pvw(){const a=parse(E.text),s=a.reduce((x,y)=>x+y.pct,0),ok=Math.abs(s-100)<0.001;
+ $("#ev").innerHTML=a.length?`<p class="${ok?"ok":"bad"}">인식 ${a.length}줄 · 배합비 합계 ${+s.toFixed(5)}% ${ok?"✓":"— 100%가 아닙니다. 빠진 줄이 없는지 ERP와 확인하세요"}</p>`+tbl(a):'<p class="bad">인식된 줄이 없습니다. 열 순서와 붙여넣기 내용을 확인하세요.</p>'}
+function sd(){const a=parse(E.text);if(!E.name.trim()||!a.length){alert("제품명과 배합표를 확인하세요");return}const d=new Date().toISOString().slice(0,10);
+ if(E.id){const p=DB.p.find(x=>x.id==E.id);p.name=E.name.trim();p.text=E.text;p.sh=E.sh.trim();p.d=d}else DB.p.push({id:""+Date.now(),name:E.name.trim(),text:E.text,sh:E.sh.trim(),sz:0,d});save();hm()}
+function op(id,i,p0){const p=p0||DB.p.find(x=>x.id==id);if(p.kind=="stock")return sk(p);if(p.kind=="dil")return dk(p);const r0=(i&&DB.run&&DB.run.pid==id)?DB.run:{};R={p,a:p.a||cl(p),i:i||0,go:false,b:r0.b||"",d:r0.d||new Date(Date.now()-new Date().getTimezoneOffset()*6e4).toISOString().slice(0,10)};DB.run=null;
+ $("#app").innerHTML=`<div id="w"><div id="L"></div><div id="R"><div class="top"><button onclick="hm()">← 제품 목록</button><b id="ttl"></b>차수 <input id="bn" placeholder="차수" oninput="R.b=this.value;show()"> 생산일 <input id="dt" type="date" onchange="R.d=this.value;show()"> 생산량 <input id="sz" type="number" inputmode="decimal" onchange="szc(this.value)">kg<button onclick="rst()">처음부터</button><button onclick="fs()">⛶ 전체화면</button></div>
+ <div class="bar"><i id="pb"></i></div><div id="main" onclick="mc()"><span id="ph"></span><div id="cnt"></div><div id="nm"></div><div id="am"></div><div id="gm"></div><div id="cd"></div></div><div id="nx"></div>
+ <div class="bt"><button id="pvb" tabindex="-1" onmousedown="event.preventDefault()" onclick="pv()">◀ 이전</button><button id="spb" tabindex="-1" onmousedown="event.preventDefault()" onclick="nx()">시작 ▶</button></div>
+ <div class="hint">위쪽 목록의 빈 곳을 한 번 눌러 활성화한 뒤 스페이스바·Enter·→ 다음 / ← 이전</div></div></div>`;document.onkeydown=kd;show()}
+const kg=x=>fk(x,R.p.sz);
+const gs=k=>{const g=k*1000;return g.toFixed(3).replace(/\.?0+$/,"")+" g"};
+function show(){const a=R.a,n=a.length,p=R.p,sz=p.sz||0;$("#ttl").textContent=pn(p.name);$("#sz").disabled=!!p.syn;if(document.activeElement!=$("#sz"))$("#sz").value=p.syn?"":sz||"";if(document.activeElement!=$("#bn"))$("#bn").value=R.b;$("#dt").value=R.d;
+ $("#spb").textContent=R.go?"다음 ▶":"시작 ▶";const c=(R.go||R.i>0)?R.i:null;$("#L").innerHTML=tbl(a,sz,c);
+ const set=(ph,cnt,nm,am,gm,cd,nx)=>{$("#ph").textContent=ph;$("#cnt").textContent=cnt;$("#nm").textContent=nm;$("#am").innerHTML=am;$("#gm").textContent=gm;$("#cd").textContent=cd;$("#nx").textContent=nx};
+ $("#pb").style.width=(R.i/n*100)+"%";
+ if(!R.go)set("준비","",!sz?"⚠ 위에 생산량(kg)을 입력하세요":R.i>0?`이어서 진행 (${a[R.i].ph}상 ${a[R.i].no}번)`:"스페이스바를 누르면 시작",sz&&!p.syn?sz+" kg":"",sz?"차수 "+(R.b||"미입력")+" · 생산일 "+R.d:"","","");
+ else if(R.i>=n){if(!R.lg&&!p.syn){R.lg=1;(DB.log=DB.log||[]).unshift({n:p.name,b:R.b,d:R.d,sz:p.sz});DB.log=DB.log.slice(0,50)}set("완료","","✅ 모든 원료 투입 완료","",p.syn?"공통 준비 완료 — 각 제품에서 공통 준비분을 사용하세요":"차수 "+(R.b||"-")+" · 생산일 "+R.d+" · 생산 기록에 저장됨","","");DB.run=null;save();$("#pb").style.width="100%"}
+ else{const x=a[R.i],y=a[R.i+1],k=kg(x),ph=a.filter(z=>z.ph==x.ph);
+  set(x.ph+"상 "+x.no+" / "+ph.length,"전체 "+(R.i+1)+" / "+n,dn(x.name),k.toFixed(6)+" kg"+(k<1?"<small>("+gs(k)+")</small>":""),x.note||"배합비 "+x.pct+"%",x.code,y?"다음: "+y.ph+"상 "+y.no+" · "+dn(y.name)+" · "+kg(y).toFixed(6)+" kg":"마지막 원료입니다");
+  if(!p.syn){DB.run={pid:p.id,i:R.i,b:R.b,d:R.d};save()}}
+ const r=$("#r"+R.i),L=$("#L");if(c!=null&&r)L.scrollTop+=r.getBoundingClientRect().top-L.getBoundingClientRect().top-L.clientHeight/2}
+function nx(){if(!R)return;if(!R.go){if(!(R.p.sz>0))return;R.go=true;show();return}if(R.i<R.a.length){R.i++;show()}}
+function mc(){if(R&&R.go)nx()}function pv(){if(R&&R.go&&R.i>0){R.i--;show()}}
+function fs(){const d=document,m="이 화면에서는 전체화면 버튼이 막혀 있습니다. 키보드 F11 키를 눌러 보세요.";try{if(d.fullscreenElement)d.exitFullscreen();else d.documentElement.requestFullscreen().catch(()=>alert(m))}catch(x){alert(m)}}
+function szc(v){v=parseFloat(v);R.p.sz=v>0?v:0;save();show()}
+function rst(){if((!R.go&&R.i==0)||confirm("처음 원료로 돌아갈까요?")){R.i=0;R.go=false;R.lg=0;DB.run=null;save();show()}}
+function kd(e){if(document.activeElement.tagName=="INPUT")return;if(document.activeElement.tagName=="BUTTON")document.activeElement.blur();
+ if([" ","Enter","ArrowRight","PageDown"].includes(e.key)){e.preventDefault();nx()}else if(["ArrowLeft","Backspace","PageUp"].includes(e.key)){e.preventDefault();pv()}}
+const fk=(x,sz)=>x.kg!=null?x.kg:sz*x.pct/100;
+const f5=v=>+v.toFixed(5);
+const r2=v=>((v<0?-1:1)*Math.round(Math.abs(v)*100+1e-7)/100).toFixed(2);
+const r3=v=>((v<0?-1:1)*Math.round(Math.abs(v)*1000+1e-6)/1000).toFixed(3);
+function cl(p){let a=parse(p.text);(p.sh||"").toUpperCase().split("").forEach(L=>{const g=a.filter(x=>x.ph==L);if(!g.length)return;const f=a.indexOf(g[0]),s=g.reduce((t,x)=>t+x.pct,0);a=a.filter(x=>x.ph!=L);a.splice(f,0,{ph:L,no:1,code:"",name:"공통 "+L+"상 준비분 투입",pct:s,note:"공통 준비 용기에서 사용"})});return a}
+let P={ph:"C",ex:"",sel:{}};
+function comb(){const ph=(P.ph||"").trim().toUpperCase(),M=[],sel=DB.p.filter(p=>P.sel[p.id]>0);
+ sel.forEach(p=>parse(p.text).filter(x=>x.ph==ph).forEach(x=>{let m=M.find(y=>y.name==x.name&&y.code==x.code);if(!m)M.push(m={name:x.name,code:x.code,k:0,pt:[]});const k=P.sel[p.id]*x.pct/100;m.k+=k;m.pt.push(pn(p.name)+" "+f5(k))}));
+ const ex=parseFloat(P.ex)||0;let big=M[0];M.forEach(m=>{if(m.k>big.k)big=m});if(big&&ex>0)big.ex=ex;
+ const rows=M.map((m,i)=>({ph,no:i+1,code:m.code,name:m.name,pct:null,kg:m.k+(m.ex||0),note:m.pt.join(" + ")+(m.ex?" + 여유 "+f5(m.ex):"")}));
+ sel.forEach((p,j)=>{const k=parse(p.text).filter(x=>x.ph==ph).reduce((t,x)=>t+P.sel[p.id]*x.pct/100,0);if(k>0)rows.push({ph,no:M.length+j+1,code:"",name:"나눠 담기 → "+pn(p.name)+" 용",pct:null,kg:k,note:"이 제품 "+ph+"상에 투입"})});return rows}
+function pp(){const ph=(P.ph||"").trim().toUpperCase(),L=DB.p.filter(p=>parse(p.text).some(x=>x.ph==ph));
+ let h=`<div class="pg"><h1>⚗ 공통 준비 (묶음 칭량)</h1><div class="card"><div class="sub">같은 날 만드는 여러 제품의 같은 상을 한 번에 칭량해 둘 때 사용합니다. 제품과 양은 그날그날 입력하세요.</div><label class="sub">묶을 상 (예: C)</label><input class="f" style="width:90px" value="${esc(P.ph)}" onchange="P.ph=this.value;P.sel={};pp()"><label class="sub">오늘 만드는 제품의 생산량(kg) — 안 만드는 제품은 비워 두세요</label>`;
+ L.forEach(p=>{h+=`<div class="pr" style="margin-bottom:6px"><span style="flex:1;min-width:140px">${esc(pn(p.name))}</span><input class="f" style="width:110px;margin:0" type="number" inputmode="decimal" placeholder="kg" value="${P.sel[p.id]||""}" onchange="P.sel['${p.id}']=parseFloat(this.value)||0;pp()"></div>`});
+ if(!L.length)h+='<p class="bad">해당 상이 있는 제품이 없습니다.</p>';
+ h+=`<label class="sub">여유분 (kg) — 휘발·용기 잔량 대비. 가장 많이 쓰는 원료에 더합니다</label><input class="f" style="width:110px" type="number" inputmode="decimal" value="${esc(P.ex)}" onchange="P.ex=this.value;pp()">`;
+ const rows=comb();
+ if(rows.length)h+=tbl(rows,1)+`<p class="sub">${rows.map(r=>esc(r.name)+": "+esc(r.note)).join("<br>")}</p><button class="btn" onclick="ps()">공통 준비 시작</button> `;
+ $("#app").innerHTML=h+'<button class="btn g" onclick="hm()">← 목록</button></div></div>'}
+function ps(){const rows=comb();if(!rows.length)return;op("syn",0,{id:"syn",syn:1,sz:1,name:(P.ph||"").trim().toUpperCase()+"상 공통 준비",a:rows})}
+[{id:"t1",name:"피셀",ed:"2026.11.3",ad:"2026-10-27",rows:[1.35,1.35]},{id:"t2",name:"올인덤",ed:"2026.10.7",ad:"2026-10-02",rows:[1.35,1.6]},{id:"t3",name:"하이얀",ed:"2026.10.6",ad:"2026-10-02",rows:[1.35,1.35]}].forEach(s=>{if(!DB.p.some(x=>x.id==s.id)&&!(DB.hid||[]).includes(s.id))DB.p.push({id:s.id,name:s.name,kind:"stock",text:"",ed:s.ed,ad:s.ad,pg:1,rows:s.rows.map(c=>({cw:c,w:""})),sz:0,d:"2026-11-25"})});if(!DB.m2){const N={t1:"피셀",t2:"올인덤",t3:"하이얀"};DB.p.forEach(p=>{if(N[p.id])p.name=N[p.id]});DB.m2=1}if(!DB.m3){DB.p.forEach(p=>{if(p.id=="k6")p.text=p.text.replace("JanyTree SGF Complex No.1","JanyTree 5GF Complex No.1");if(p.id=="k8")p.text=p.text.replace("LactoPoL DX193 (W)_20kg","LactoPoL DX193 (W) (락토바실러스발효물)_20kg")});DB.m3=1}if(!DB.m4){DB.p.forEach(p=>{if(p.id=="d7")p.name="보나필 리쥬";if(p.id=="d8")p.name="레몬보틀앰플솔루션"});DB.m4=1}save();
+function sk(p){R=null;document.onkeydown=null;const id=p.id;
+ $("#app").innerHTML=`<div class="pg"><div class="pr"><button class="btn g" onclick="hm()">← 제품 목록</button></div><h1 id="skt">${esc(p.name)}</h1><div class="card"><div class="pr"><div><label class="sub">차수</label><input class="f" style="width:90px" value="${esc(sn(p))}" onchange="pc('${id}',this.value)"></div><div style="flex:1"><label class="sub">저장된 차수</label><div class="pr">${hc(p)}</div></div><div><label class="sub">ERP 제조일</label><input class="f" style="width:150px" value="${esc(p.ed||"")}" oninput="pk('${id}','ed',this.value)"></div><div><label class="sub">실제 제조일</label><input class="f" type="date" style="width:170px" value="${esc(p.ad||"")}" oninput="pk('${id}','ad',this.value)"></div><div><label class="sub">펜틸렌글라이콜 비율 (%, 원액 기준)</label><input class="f" type="number" step="any" style="width:110px" value="${p.pg}" oninput="pk('${id}','pg',parseFloat(this.value)||0);su('${id}')"></div></div></div><div id="skb"></div></div>`;sw(id)}
+const sn=p=>(p.name.match(/_([^_]*)차$/)||[,""])[1];
+function pc(id,v){const p=DB.p.find(x=>x.id==id),b=p.name.replace(/_[^_]*차$/,"");v=v.replace(/[<>"'`&\\]/g,"").trim();hs(p);p.name=v?b+"_"+v+"차":b;ld(p,v||"-");save();p.kind=="dil"?dk(p):sk(p)}
+function HF(p){return p.kind=="dil"?["T","s","bt","rq","ip","wd","ed","ad"]:["rows","ed","ad","pg"]}
+function hs(p){const k=(p.name.match(/_([^_]*)차$/)||[,""])[1]||"-",o={};HF(p).forEach(f=>o[f]=p[f]);(p.hist=p.hist||{})[k]=JSON.parse(JSON.stringify(o))}
+function ld(p,k){const h=p.hist&&p.hist[k];if(h){HF(p).forEach(f=>{if(h[f]!==undefined)p[f]=JSON.parse(JSON.stringify(h[f]))});return}
+ if(p.kind=="dil"){p.s="";p.bt=(p.bt||[]).map(()=>({x:"",m:""}));["rq","ip","wd","ed","ad"].forEach(f=>p[f]="")}else{p.rows=p.rows.map(r=>({cw:r.cw,w:""}));p.ed="";p.ad=""}}
+function hc(p){const cur=(p.name.match(/_([^_]*)차$/)||[,""])[1]||"-",id=p.id;return Object.keys(p.hist||{}).map(k=>`<button class="btn g" style="padding:6px 12px${k==cur?";border:2px solid var(--pri);font-weight:800":""}" onclick="pc('${id}','${k=="-"?"":k}')">${k=="-"?"차수 없음":esc(k)+"차"}</button>`).join("")}
+function pk(id,k,v){DB.p.find(x=>x.id==id)[k]=v;save()}
+function sw(id){const p=DB.p.find(x=>x.id==id);let h='<div class="card"><div style="overflow-x:auto"><table class="t"><thead><tr class="pc"><th></th><th></th><th></th><th class="n" id="pp1"></th><th class="n" id="pp2"></th><th></th><th></th></tr><tr><th>No</th><th>입고량(kg)<br>뚜껑 제외·용기 포함</th><th>용기무게</th><th class="n">원액</th><th class="n">펜틸렌글라이콜</th><th class="n">총제조량</th><th class="n tw">계량무게<br>(용기 포함)</th></tr></thead><tbody>';
+ p.rows.forEach((r,k)=>{h+=`<tr><td>${k+1}</td><td><input class="f yl" type="number" inputmode="decimal" step="any" value="${r.w}" oninput="ri('${id}',${k},'w',this.value)"></td><td><input class="f" type="number" inputmode="decimal" step="any" value="${r.cw}" oninput="ri('${id}',${k},'cw',this.value)"></td><td class="n" id="a${k}"></td><td class="n" id="g${k}"></td><td class="n" id="t${k}"></td><td class="n bg" id="m${k}"></td></tr>`});
+ h+=`</tbody></table></div><div id="ms" style="margin-top:12px"></div><div id="tt" style="margin-top:10px"></div></div><div class="pr"><button class="btn g" onclick="ra('${id}')">＋ 용기 추가</button><button class="btn g" onclick="rd('${id}')">－ 마지막 줄 삭제</button><button class="btn g" onclick="rc('${id}')">입력 지우기</button></div><p class="sub">노란색 칸에 저울로 재신 입고량(용기 포함, 뚜껑 제외)을 입력하세요. 원액 = 입고량 − 용기무게, 펜틸렌글라이콜 = 원액 × 비율, 총제조량 = 원액 + 펜틸렌글라이콜, 계량무게 = 입고량 + 펜틸렌글라이콜(용기를 올린 채 펜틸렌글라이콜까지 넣었을 때의 목표 눈금)입니다.</p>`;
+ $("#skb").innerHTML=h;su(id)}
+function su(id){const p=DB.p.find(x=>x.id==id),pg=(parseFloat(p.pg)||0)/100;let A=0,G=0,T=0,bad=0;const MS=[];
+ p.rows.forEach((r,k)=>{const set=(s,v)=>{const e=$("#"+s+k);if(e)e.textContent=v};
+  if(r.w===""||isNaN(parseFloat(r.w))){["a","g","t","m"].forEach(s=>set(s,"-"));return}
+  const w=parseFloat(r.w),n=w-(parseFloat(r.cw)||0),g=n*pg;if(n<0)bad++;A+=n;G+=g;T+=n+g;
+  set("a",r2(n));set("g",r3(g));set("t",r2(n+g));set("m",r2(w+g));MS.push("용기 "+(k+1)+" · 계량무게 <b>"+r2(w+g)+"</b> kg")});
+ $("#pp1").textContent=r2(100-(parseFloat(p.pg)||0))+"%";$("#pp2").textContent=r2(parseFloat(p.pg)||0)+"%";$("#ms").innerHTML=MS.length?'<div class="bigm">'+MS.join('</div><div class="bigm">')+'</div>':"";
+ $("#tt").innerHTML=`원액 합계 <b>${r2(A)}</b> kg · 펜틸렌글라이콜 합계 <b>${r3(G)}</b> kg · 총제조량 합계 <b>${r2(T)}</b> kg`+(bad?` <span class="bad">⚠ 입고량이 용기무게보다 작은 줄이 있습니다</span>`:"")}
+function ri(id,k,f,v){DB.p.find(x=>x.id==id).rows[k][f]=v;save();su(id)}
+function ra(id){DB.p.find(x=>x.id==id).rows.push({cw:1.35,w:""});save();sw(id)}
+function rd(id){const p=DB.p.find(x=>x.id==id);if(p.rows.length>1){p.rows.pop();save();sw(id)}}
+function rc(id){DB.p.find(x=>x.id==id).rows.forEach(r=>r.w="");save();sw(id)}
+const fx=v=>{let s=(Math.round(Math.abs(v)*1e4+1e-6)/1e4).toFixed(4).replace(/0+$/,"");const d=s.split(".")[1]||"";if(d.length<2)s+="0".repeat(2-d.length);return (v<0?"-":"")+s};
+const DS=[["d1","더레드",55,10,[["소금",0.81],["펜틸렌글라이콜",3],["사이아노코발라민",0.06]]],["d2","밥식스",30,10,[["소금",0.81],["펜틸렌글라이콜",3]]],["d3","바비네오",30,10,[["소금",0.81],["펜틸렌글라이콜",3]]],["d4","바비네오 디디컷",33,10,[["소금",0.81],["펜틸렌글라이콜",3]]],["d5","레몬스킨부스터 디디밤",15,10,[["소금",0.81],["HA",0.3],["펜틸렌글라이콜",3]]],["d6","레몬스킨부스터",26,10,[["소금",0.81],["HA",0.3],["펜틸렌글라이콜",3]]],["d7","보나필 리쥬",22,10,[["소금",0.81],["HA",0.3],["펜틸렌글라이콜",3]]],["d8","레몬보틀앰플솔루션",265,18,[["소금",0.81],["펜틸렌글라이콜",3]],1]];
+DS.forEach(s=>{if(!DB.p.some(x=>x.id==s[0])&&!(DB.hid||[]).includes(s[0]))DB.p.push({id:s[0],name:s[1],kind:"dil",text:"",T:s[2],sp:s[3],it:s[4],dl:s[5]?1:0,l0:s[5]?"원료":"입고원액",s:"",bt:s[5]?[0,1,2,3,4,5].map(()=>({x:"",m:""})):[],rq:"",ip:"",ed:"",ad:"",sz:0,d:"2026-11-25"})});save();
+function dk(p){R=null;document.onkeydown=null;const id=p.id,I=(l,k,c)=>`<div class="pr" style="justify-content:space-between;gap:6px;flex-wrap:nowrap"><span class="${c?"":"sub"}" style="${c?"font-size:17px;font-weight:800":""}">${l} :</span><input class="f ${c||""}" style="width:150px;margin:2px 0" value="${esc(p[k]||"")}" oninput="pk('${id}','${k}',this.value)"></div>`;
+ $("#app").innerHTML=`<div class="pg" style="max-width:1100px"><div class="pr"><button class="btn g" onclick="hm()">← 제품 목록</button></div><div class="xl"><div class="pr"><h1 id="skt" style="margin:0">${esc(p.name)}</h1><span class="sub">차수</span><input class="f" style="width:80px;margin:0" value="${esc(sn(p))}" onchange="pc('${id}',this.value)"><span class="sub">저장된 차수</span>${hc(p)}</div><div class="xh"><div style="min-width:280px">${I("요청일자","rq")}${I("입고예정일","ip")}</div><div style="min-width:300px">${I("원액제조일","wd","em")}${I("ERP제조일","ed")}${I("실제제조일","ad")}</div></div><div style="overflow-x:auto" id="dkb"></div><div id="dgw" class="bad" style="margin-top:6px"></div></div><div id="dkc"></div></div>`;dw(id)}
+function pT(id,v){DB.p.find(x=>x.id==id).T=parseFloat(v)||0;save();du(id)}
+function pS(id,v){DB.p.find(x=>x.id==id).s=v;save();du(id)}
+function pB(id,k,f,v){DB.p.find(x=>x.id==id).bt[k][f]=v;save();du(id)}
+function dw(id){const p=DB.p.find(x=>x.id==id),g='<td class="gp"></td>',F=p.dl?r3:r2;
+ $("#dkb").innerHTML=`<table class="xt"><tr class="pc"><td>100.00%</td><td>${F(p.dl?10:p.sp)}%</td>${g}<td id="e0p"></td>${p.it.map(x=>`<td>${F(x[1])}%</td>`).join("")}<td id="ewp"></td>${p.dl?'<td id="ehp"></td>':""}</tr>
+ <tr class="hd"><td>총제조량</td><td style="color:#d92d20">${esc(pn(p.name))} 원액</td>${g}<td class="bl">${p.l0}</td>${p.it.map(x=>`<td class="bl">${esc(x[0])}</td>`).join("")}<td class="bl">멸균정제수</td>${p.dl?'<td class="bl">멸균정제수<br>(희석액)</td>':""}</tr>
+ <tr><td><input class="f yl2" type="number" step="any" inputmode="decimal" value="${p.T}" oninput="pT('${id}',this.value)"> kg</td><td class="rd" id="etg"></td>${g}<td><input class="f yl2" type="number" step="any" inputmode="decimal" value="${p.s}" oninput="pS('${id}',this.value)"> kg</td>${p.it.map((x,k)=>`<td id="d${k+1}a"></td>`).join("")}<td id="dwa"></td>${p.dl?'<td id="dha"></td>':""}</tr>
+ <tr><td style="border:0"></td><td style="border:0"></td>${g}<td class="yl2" style="font-size:13px">*직접입력할 것</td>${p.it.map((x,k)=>`<td id="d${k+1}c"></td>`).join("")}<td class="tot" id="dwc"></td>${p.dl?'<td style="border:0"></td>':""}</tr></table>`;
+ if(p.dl){let b=`<div class="xl"><div class="sub">분할 희석 — 원액 ${p.sp}% : 멸균정제수(희석액) ${100-p.sp}%</div><div style="overflow-x:auto"><table class="xt"><tr class="hd"><td>No.</td><td class="bl">멸균정제수<br>(희석액)</td><td style="color:#d92d20">원액</td><td>합계</td><td>메모</td></tr>`;
+  p.bt.forEach((q,k)=>{b+=`<tr><td>${k+1}차 <span class="sub">${p.sp}%</span></td><td id="b${k}d"></td><td><input class="f yl2" type="number" step="any" inputmode="decimal" value="${q.x}" oninput="pB('${id}',${k},'x',this.value)"></td><td id="b${k}t"></td><td><input class="f" style="width:110px" value="${esc(q.m)}" oninput="pB('${id}',${k},'m',this.value)"></td></tr>`});
+  $("#dkc").innerHTML=b+'</table></div><div id="btt" style="margin-top:10px"></div></div>'}
+ du(id)}
+function du(id){const p=DB.p.find(x=>x.id==id),T=parseFloat(p.T)||0,S=parseFloat(p.s),has=!isNaN(S),base=p.dl?T*p.sp/100:T,tp=p.dl?10:p.sp,F=p.dl?r3:r2;
+ const set=(s,v)=>{const e=$("#"+s);if(e)e.innerHTML=v},pc2=v=>T?F(v/T*100)+"%":"-",am=v=>(v>=10?r2(v):fx(v))+" kg";
+ set("etg",r2(T*tp/100)+" kg");set("ehp",p.dl?pc2(T-base):"");set("dha",p.dl?am(T-base):"");
+ let cum=has?S:0,sum=0;set("e0p",has?pc2(S):"-");
+ p.it.forEach((x,k)=>{const a=T*x[1]/100;sum+=a;cum+=a;set("d"+(k+1)+"a",am(a));set("d"+(k+1)+"c",has?r2(cum)+" kg":"-")});
+ if(has){const w=base-S-sum;set("ewp",pc2(w));set("dwa",am(w));set("dwc","<small>"+(p.dl?"원액 :":"합계")+"</small><br>"+r2(base)+" kg");set("dgw",w<0?"⚠ 멸균정제수가 음수입니다. 입고원액을 확인하세요":"")}else{["ewp","dwa"].forEach(s=>set(s,"-"));set("dwc","<small>"+(p.dl?"원액 :":"합계")+"</small><br>-");set("dgw","")}
+ if(p.dl){let X=0,D=0,W=0;p.bt.forEach((b,k)=>{const x=parseFloat(b.x);if(isNaN(x)){set("b"+k+"d","-");set("b"+k+"t","-");return}const t=x/(p.sp/100),d=t-x;X+=x;D+=d;W+=t;set("b"+k+"d",r2(d));set("b"+k+"t",r2(t))});
+  set("btt",`원액 합계 <b>${r2(X)}</b> kg · 희석액 합계 <b>${r2(D)}</b> kg · 합계 <b>${r2(W)}</b> kg · 남은 원액 <b>${r2(base-X)}</b> kg`)}}
+hm();
+</script></body></html>
